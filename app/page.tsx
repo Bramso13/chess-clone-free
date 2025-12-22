@@ -13,6 +13,12 @@ export default function Home() {
           priority
         />
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
+          <div className="p-4 bg-blue-500 text-white rounded-lg mb-4">
+            <h2 className="text-xl font-bold">Tailwind CSS Test</h2>
+            <p className="mt-2 text-sm">
+              Si vous voyez ce message stylé, Tailwind fonctionne !
+            </p>
+          </div>
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             To get started, edit the page.tsx file.
           </h1>
