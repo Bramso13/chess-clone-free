@@ -138,3 +138,80 @@ export interface Opening {
   /** Date de création */
   created_at: string;
 }
+
+/**
+ * Niveaux de difficulté pour Stockfish
+ */
+export type DifficultyLevel =
+  | "beginner"
+  | "intermediate"
+  | "advanced"
+  | "expert"
+  | "master";
+
+/**
+ * Configuration pour l'analyse Stockfish
+ */
+export interface StockfishConfig {
+  /** Niveau de skill (0-20) */
+  skillLevel: number;
+  /** Profondeur de recherche */
+  depth: number;
+  /** Temps de réflexion en millisecondes */
+  moveTime?: number;
+}
+
+/**
+ * Options pour l'analyse de position
+ */
+export interface AnalysisOptions {
+  /** Profondeur de recherche (défaut: 10) */
+  depth?: number;
+  /** Temps maximum en millisecondes */
+  moveTime?: number;
+  /** Nombre de lignes d'analyse (défaut: 1) */
+  multiPv?: number;
+}
+
+/**
+ * Résultat de l'analyse Stockfish
+ */
+export interface AnalysisResult {
+  /** Meilleur coup en format UCI (ex: "e2e4") */
+  bestMove: string;
+  /** Évaluation en centipawns (positif = avantage blanc) */
+  evaluation?: number;
+  /** Profondeur de recherche atteinte */
+  depth: number;
+  /** Temps d'analyse en millisecondes */
+  time: number;
+  /** Séquence de coups recommandés */
+  pv?: string[];
+}
+
+/**
+ * Interface pour le moteur Stockfish (Web Worker)
+ */
+export interface StockfishEngine {
+  /** Envoyer une commande UCI au moteur */
+  postMessage(command: string): void;
+  /** Gestionnaire de messages reçus du moteur */
+  onmessage: ((event: MessageEvent) => void) | null;
+  /** Terminer le moteur */
+  terminate(): void;
+}
+
+/**
+ * Couleur du joueur dans une partie
+ */
+export type PlayerColor = "white" | "black" | "random";
+
+/**
+ * Configuration d'une partie contre Stockfish
+ */
+export interface GameConfiguration {
+  /** Niveau de difficulté */
+  difficulty: DifficultyLevel;
+  /** Couleur du joueur (blancs, noirs, ou aléatoire) */
+  playerColor: PlayerColor;
+}

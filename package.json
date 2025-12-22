@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:supabase": "tsx lib/supabase/test-connection.ts",
-    "seed:openings": "tsx lib/supabase/seed-openings.ts"
+    "seed:openings": "tsx lib/supabase/seed-openings.ts",
+    "postinstall": "node scripts/copy-stockfish.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
@@ -19,7 +20,8 @@
     "next": "16.1.1",
     "react": "19.2.3",
     "react-chessboard": "^5.8.6",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "stockfish": "^17.1.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
