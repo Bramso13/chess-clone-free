@@ -1,0 +1,559 @@
+{
+  "openings": [
+    {
+      "name": "Ruy Lopez",
+      "eco_code": "C70",
+      "description": "L'une des ouvertures les plus anciennes et les plus classiques, nommée d'après un prêtre espagnol du XVIe siècle.",
+      "player_side": "white",
+      "moves": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bb5",
+        "a6",
+        "Ba4",
+        "Nf6",
+        "O-O",
+        "Be7",
+        "Re1",
+        "b5",
+        "Bb3",
+        "d6",
+        "c3"
+      ],
+      "variations": [
+        {
+          "name": "Marshall Attack",
+          "moves": [
+            "e4",
+            "e5",
+            "Nf3",
+            "Nc6",
+            "Bb5",
+            "a6",
+            "Ba4",
+            "Nf6",
+            "O-O",
+            "Be7",
+            "Re1",
+            "b5",
+            "Bb3",
+            "O-O",
+            "c3",
+            "d5"
+          ]
+        },
+        {
+          "name": "Closed Variation",
+          "moves": [
+            "e4",
+            "e5",
+            "Nf3",
+            "Nc6",
+            "Bb5",
+            "a6",
+            "Ba4",
+            "Nf6",
+            "O-O",
+            "Be7",
+            "Re1",
+            "b5",
+            "Bb3",
+            "d6",
+            "c3",
+            "O-O",
+            "h3"
+          ]
+        },
+        {
+          "name": "Berlin Defense",
+          "moves": [
+            "e4",
+            "e5",
+            "Nf3",
+            "Nc6",
+            "Bb5",
+            "Nf6",
+            "O-O",
+            "Nxe4",
+            "d4",
+            "Nd6",
+            "Bxc6",
+            "dxc6",
+            "dxe5",
+            "Nf5"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sicilian Defense",
+      "eco_code": "B50",
+      "description": "La défense la plus populaire contre 1.e4, offrant aux noirs de bonnes chances de gagner.",
+      "player_side": "black",
+      "moves": [
+        "e4",
+        "c5",
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3",
+        "a6",
+        "Be3",
+        "e5",
+        "Nb3",
+        "Be6",
+        "f3"
+      ],
+      "variations": [
+        {
+          "name": "Najdorf Variation",
+          "moves": [
+            "e4",
+            "c5",
+            "Nf3",
+            "d6",
+            "d4",
+            "cxd4",
+            "Nxd4",
+            "Nf6",
+            "Nc3",
+            "a6",
+            "Be3",
+            "e5",
+            "Nb3",
+            "Be6"
+          ]
+        },
+        {
+          "name": "Dragon Variation",
+          "moves": [
+            "e4",
+            "c5",
+            "Nf3",
+            "d6",
+            "d4",
+            "cxd4",
+            "Nxd4",
+            "Nf6",
+            "Nc3",
+            "g6",
+            "Be3",
+            "Bg7",
+            "f3",
+            "O-O"
+          ]
+        },
+        {
+          "name": "Sveshnikov Variation",
+          "moves": [
+            "e4",
+            "c5",
+            "Nf3",
+            "Nc6",
+            "d4",
+            "cxd4",
+            "Nxd4",
+            "Nf6",
+            "Nc3",
+            "e5",
+            "Ndb5",
+            "d6",
+            "Bg5",
+            "a6"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "French Defense",
+      "eco_code": "C10",
+      "description": "Une défense solide qui crée immédiatement une tension dans le centre.",
+      "player_side": "black",
+      "moves": [
+        "e4",
+        "e6",
+        "d4",
+        "d5",
+        "Nc3",
+        "Nf6",
+        "Bg5",
+        "Be7",
+        "e5",
+        "Nfd7",
+        "Bxe7",
+        "Qxe7",
+        "f4",
+        "O-O",
+        "Nf3"
+      ],
+      "variations": [
+        {
+          "name": "Winawer Variation",
+          "moves": [
+            "e4",
+            "e6",
+            "d4",
+            "d5",
+            "Nc3",
+            "Bb4",
+            "e5",
+            "c5",
+            "a3",
+            "Bxc3+",
+            "bxc3",
+            "Ne7"
+          ]
+        },
+        {
+          "name": "Classical Variation",
+          "moves": [
+            "e4",
+            "e6",
+            "d4",
+            "d5",
+            "Nc3",
+            "Nf6",
+            "Bg5",
+            "Be7",
+            "e5",
+            "Nfd7",
+            "Bxe7",
+            "Qxe7"
+          ]
+        },
+        {
+          "name": "Tarrasch Variation",
+          "moves": [
+            "e4",
+            "e6",
+            "d4",
+            "d5",
+            "Nd2",
+            "c5",
+            "exd5",
+            "exd5",
+            "Ngf3",
+            "Nc6",
+            "Bb5",
+            "Bd6"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Italian Game",
+      "eco_code": "C50",
+      "description": "L'une des plus anciennes ouvertures enregistrées, se concentrant sur le contrôle rapide du centre.",
+      "player_side": "white",
+      "moves": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "Bc5",
+        "c3",
+        "Nf6",
+        "d4",
+        "exd4",
+        "cxd4",
+        "Bb4+",
+        "Bd2",
+        "Bxd2+",
+        "Nbxd2"
+      ],
+      "variations": [
+        {
+          "name": "Giuoco Piano",
+          "moves": [
+            "e4",
+            "e5",
+            "Nf3",
+            "Nc6",
+            "Bc4",
+            "Bc5",
+            "c3",
+            "Nf6",
+            "d4",
+            "exd4",
+            "cxd4",
+            "Bb4+",
+            "Nc3"
+          ]
+        },
+        {
+          "name": "Two Knights Defense",
+          "moves": [
+            "e4",
+            "e5",
+            "Nf3",
+            "Nc6",
+            "Bc4",
+            "Nf6",
+            "Ng5",
+            "d5",
+            "exd5",
+            "Na5",
+            "Bb5+",
+            "c6"
+          ]
+        },
+        {
+          "name": "Evans Gambit",
+          "moves": [
+            "e4",
+            "e5",
+            "Nf3",
+            "Nc6",
+            "Bc4",
+            "Bc5",
+            "b4",
+            "Bxb4",
+            "c3",
+            "Ba5",
+            "d4",
+            "exd4"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Queen's Gambit",
+      "eco_code": "D06",
+      "description": "L'une des ouvertures les plus anciennes et les plus respectées, populaire à tous les niveaux.",
+      "player_side": "white",
+      "moves": [
+        "d4",
+        "d5",
+        "c4",
+        "e6",
+        "Nc3",
+        "Nf6",
+        "Bg5",
+        "Be7",
+        "e3",
+        "O-O",
+        "Nf3",
+        "Nbd7",
+        "Rc1",
+        "c6",
+        "Bd3"
+      ],
+      "variations": [
+        {
+          "name": "Queen's Gambit Accepted",
+          "moves": [
+            "d4",
+            "d5",
+            "c4",
+            "dxc4",
+            "Nf3",
+            "Nf6",
+            "e3",
+            "e6",
+            "Bxc4",
+            "c5",
+            "O-O",
+            "a6"
+          ]
+        },
+        {
+          "name": "Queen's Gambit Declined",
+          "moves": [
+            "d4",
+            "d5",
+            "c4",
+            "e6",
+            "Nc3",
+            "Nf6",
+            "Bg5",
+            "Be7",
+            "e3",
+            "O-O",
+            "Nf3",
+            "Nbd7"
+          ]
+        },
+        {
+          "name": "Slav Defense",
+          "moves": [
+            "d4",
+            "d5",
+            "c4",
+            "c6",
+            "Nf3",
+            "Nf6",
+            "Nc3",
+            "dxc4",
+            "a4",
+            "Bf5",
+            "e3",
+            "e6"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "King's Indian Defense",
+      "eco_code": "E60",
+      "description": "Une défense hypermoderne où les noirs permettent aux blancs d'occuper le centre pour l'attaquer plus tard.",
+      "player_side": "black",
+      "moves": [
+        "d4",
+        "Nf6",
+        "c4",
+        "g6",
+        "Nc3",
+        "Bg7",
+        "e4",
+        "d6",
+        "Nf3",
+        "O-O",
+        "Be2",
+        "e5",
+        "O-O",
+        "Nc6",
+        "d5"
+      ],
+      "variations": [
+        {
+          "name": "Classical Variation",
+          "moves": [
+            "d4",
+            "Nf6",
+            "c4",
+            "g6",
+            "Nc3",
+            "Bg7",
+            "e4",
+            "d6",
+            "Nf3",
+            "O-O",
+            "Be2",
+            "e5",
+            "O-O",
+            "Nc6"
+          ]
+        },
+        {
+          "name": "Fianchetto Variation",
+          "moves": [
+            "d4",
+            "Nf6",
+            "c4",
+            "g6",
+            "Nf3",
+            "Bg7",
+            "g3",
+            "O-O",
+            "Bg2",
+            "d6",
+            "O-O",
+            "Nbd7",
+            "Nc3"
+          ]
+        },
+        {
+          "name": "Samisch Variation",
+          "moves": [
+            "d4",
+            "Nf6",
+            "c4",
+            "g6",
+            "Nc3",
+            "Bg7",
+            "e4",
+            "d6",
+            "f3",
+            "O-O",
+            "Be3",
+            "e5",
+            "Nge2"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Caro-Kann Defense",
+      "eco_code": "B10",
+      "description": "Une défense solide et fiable contre 1.e4, favorisée par les joueurs positionnels.",
+      "player_side": "black",
+      "moves": [
+        "e4",
+        "c6",
+        "d4",
+        "d5",
+        "Nc3",
+        "dxe4",
+        "Nxe4",
+        "Bf5",
+        "Ng3",
+        "Bg6",
+        "h4",
+        "h6",
+        "Nf3",
+        "Nd7",
+        "h5"
+      ],
+      "variations": [
+        {
+          "name": "Classical Variation",
+          "moves": [
+            "e4",
+            "c6",
+            "d4",
+            "d5",
+            "Nc3",
+            "dxe4",
+            "Nxe4",
+            "Bf5",
+            "Ng3",
+            "Bg6",
+            "h4",
+            "h6",
+            "Nf3"
+          ]
+        },
+        {
+          "name": "Advance Variation",
+          "moves": [
+            "e4",
+            "c6",
+            "d4",
+            "d5",
+            "e5",
+            "Bf5",
+            "Nf3",
+            "e6",
+            "Be2",
+            "Nd7",
+            "O-O",
+            "Ne7"
+          ]
+        },
+        {
+          "name": "Exchange Variation",
+          "moves": [
+            "e4",
+            "c6",
+            "d4",
+            "d5",
+            "exd5",
+            "cxd5",
+            "Bd3",
+            "Nc6",
+            "c3",
+            "Nf6",
+            "Bf4",
+            "Bg4"
+          ]
+        }
+      ]
+    }
+  ]
+}
