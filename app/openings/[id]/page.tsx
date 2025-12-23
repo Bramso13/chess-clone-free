@@ -88,22 +88,12 @@ export default function OpeningTrainingPage() {
             </div>
             
             <div className="flex items-center gap-3">
-              {opening?.is_custom && (
-                <>
-                  <Link
-                    href={`/openings/${openingId}/edit`}
-                    className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
-                  >
-                    Modifier
-                  </Link>
-                  <Link
-                    href={`/openings/${openingId}/add-variation`}
-                    className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-                  >
-                    Ajouter une variante
-                  </Link>
-                </>
-              )}
+              <Link
+                href={`/openings/${openingId}/explore`}
+                className="px-3 py-1.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+              >
+                Explorer les variantes
+              </Link>
               <Link
                 href="/"
                 className="text-gray-600 hover:text-gray-800 text-sm transition-colors"

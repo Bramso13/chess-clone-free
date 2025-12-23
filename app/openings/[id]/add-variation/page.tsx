@@ -13,7 +13,8 @@ import { StockfishSuggestion } from "@/components/freeplay/StockfishSuggestion";
 import { useVariationCreation } from "@/lib/hooks/useVariationCreation";
 import { useStockfishAnalysis } from "@/lib/hooks/useStockfishAnalysis";
 import { getOpeningById } from "@/lib/services/openingsService";
-import { updateCustomOpening } from "@/lib/openings/customOpeningService";
+import { addVariationToOpening } from "@/lib/openings/customOpeningService";
+import type { OpeningVariation } from "@/types/chess";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import type { Move } from "@/types/chess";
 import type { Opening } from "@/types/chess";
@@ -107,30 +108,39 @@ export default function AddVariationPage() {
     setError(null);
 
     try {
+      // Construire la variante complète : coups du début jusqu'au point de départ + coups de la variante
+      // Les coups de la ligne principale jusqu'à variationStartIndex (inclus)
+      const mainLineUpToStart = mainLineMoves.slice(0, variationStartIndex + 1);
+      // La variante complète = coups du début + coups de la variante
+      const completeVariationMoves = [...mainLineUpToStart, ...variationMoves];
+
       // Construire la nouvelle variante
-      const newVariation = {
+      const newVariation: OpeningVariation = {
         name: variationName.trim(),
-        moves: variationMoves,
-        description: variationDescription.trim() || undefined,
+        moves: completeVariationMoves,
       };
 
-      // Ajouter la variante aux variations existantes
-      const updatedVariations = [
-        ...(opening.variations || []),
-        newVariation,
-      ];
-
-      // Mettre à jour l'ouverture
-      await updateCustomOpening(opening.id, {
-        name: opening.name,
-        eco_code: opening.eco_code,
-        description: opening.description,
-        moves: opening.moves,
-        variations: updatedVariations,
+      console.log("📝 Variante complète:", {
+        mainLineUpToStart,
+        variationMoves,
+        completeVariationMoves,
       });
 
-      // Rediriger vers la page d'entraînement
+      // Ajouter la variante à l'ouverture (fonctionne pour toutes les ouvertures)
+      const updatedOpening = await addVariationToOpening(
+        opening.id,
+        newVariation
+      );
+
+      console.log(
+        "✅ Variante sauvegardée:",
+        updatedOpening.variations?.length || 0,
+        "variations"
+      );
+
+      // Rediriger vers la page d'entraînement avec rechargement forcé
       router.push(`/openings/${opening.id}`);
+      router.refresh(); // Forcer le rechargement des données
     } catch (err) {
       setError(
         err instanceof Error
@@ -150,7 +160,8 @@ export default function AddVariationPage() {
     if (uciMove.length >= 4) {
       const from = uciMove.substring(0, 2);
       const to = uciMove.substring(2, 4);
-      const promotion = uciMove.length > 4 ? (uciMove[4] as "q" | "r" | "b" | "n") : undefined;
+      const promotion =
+        uciMove.length > 4 ? (uciMove[4] as "q" | "r" | "b" | "n") : undefined;
       playVariationMove({
         from: from as any,
         to: to as any,
@@ -204,7 +215,7 @@ export default function AddVariationPage() {
             ← Retour à l'ouverture
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">
-            Ajouter une variante à {opening?.name}
+            Ajouter une variante à {opening?.name || "l'ouverture"}
           </h1>
           <p className="mt-2 text-gray-600">
             Naviguez dans l'ouverture principale, puis créez votre variante
@@ -392,7 +403,11 @@ export default function AddVariationPage() {
 
                   <button
                     onClick={handleSubmit}
-                    disabled={!canCreateVariation || !variationName.trim() || isSubmitting}
+                    disabled={
+                      !canCreateVariation ||
+                      !variationName.trim() ||
+                      isSubmitting
+                    }
                     className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? "Sauvegarde..." : "Sauvegarder la variante"}
@@ -400,7 +415,8 @@ export default function AddVariationPage() {
 
                   {!canCreateVariation && variationMoves.length > 0 && (
                     <p className="text-sm text-gray-500 text-center">
-                      La variante doit contenir au moins 1 coup différent de la ligne principale
+                      La variante doit contenir au moins 1 coup différent de la
+                      ligne principale
                     </p>
                   )}
                 </div>
@@ -412,4 +428,3 @@ export default function AddVariationPage() {
     </div>
   );
 }
-

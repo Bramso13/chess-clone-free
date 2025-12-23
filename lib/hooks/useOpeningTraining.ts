@@ -59,10 +59,22 @@ export function useOpeningTraining(opening: Opening | null): {
 
   // Initialiser la variante principale quand l'ouverture est chargée
   useEffect(() => {
-    if (opening && opening.variations && opening.variations.length > 0) {
-      const mainVariation = opening.variations[0];
-      setCurrentVariation(mainVariation);
-      setCurrentVariationIndex(0);
+    if (opening) {
+      // Si l'ouverture a des variations, utiliser la première
+      // Sinon, créer une variation principale à partir des coups de l'ouverture
+      if (opening.variations && opening.variations.length > 0) {
+        const mainVariation = opening.variations[0];
+        setCurrentVariation(mainVariation);
+        setCurrentVariationIndex(0);
+      } else if (opening.moves && opening.moves.length > 0) {
+        // Créer une variation principale à partir des coups de l'ouverture
+        const mainVariation: OpeningVariation = {
+          name: "Ligne principale",
+          moves: opening.moves,
+        };
+        setCurrentVariation(mainVariation);
+        setCurrentVariationIndex(0);
+      }
 
       // Utiliser le player_side de l'ouverture pour déterminer la couleur de l'utilisateur
       setUserColor(opening.player_side);

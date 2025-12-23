@@ -34,6 +34,14 @@ CREATE POLICY "Allow public delete on custom openings"
     FOR DELETE
     USING (is_custom = true);
 
+-- Policy pour permettre l'ajout de variantes à toutes les ouvertures (UPDATE des variations uniquement)
+-- Note: Cette policy permet de mettre à jour uniquement le champ variations pour toutes les ouvertures
+CREATE POLICY "Allow public update variations on all openings"
+    ON openings
+    FOR UPDATE
+    USING (true)
+    WITH CHECK (true);
+
 -- Commentaire sur la colonne
 COMMENT ON COLUMN openings.is_custom IS 'Indique si l''ouverture est personnalisée (créée par un utilisateur)';
 COMMENT ON COLUMN openings.created_by IS 'Identifiant de l''utilisateur qui a créé l''ouverture (pour futur système d''authentification)';

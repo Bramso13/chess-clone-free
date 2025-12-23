@@ -92,12 +92,16 @@ function validateOpeningData(input: CustomOpeningInput): ValidationResult {
   }
 
   // Valider format ECO si fourni
+  // Permettre les codes ECO standards (A00-E99) ou les codes personnalisés (C suivi de caractères)
   if (input.eco_code && input.eco_code.trim().length > 0) {
-    const ecoPattern = /^[A-E][0-9]{2}$/;
-    if (!ecoPattern.test(input.eco_code.trim())) {
+    const ecoCode = input.eco_code.trim();
+    const standardEcoPattern = /^[A-E][0-9]{2}$/;
+    const customEcoPattern = /^C[A-Z0-9]+$/; // Codes personnalisés commençant par C
+    
+    if (!standardEcoPattern.test(ecoCode) && !customEcoPattern.test(ecoCode)) {
       return {
         isValid: false,
-        error: "Le code ECO doit être au format A00-E99",
+        error: "Le code ECO doit être au format A00-E99 ou un code personnalisé (C suivi de caractères)",
       };
     }
   }
@@ -207,6 +211,88 @@ export async function getCustomOpenings(): Promise<Opening[]> {
     }
 
     return (data || []) as Opening[];
+  } catch (error) {
+    if (error instanceof CustomOpeningError) {
+      throw error;
+    }
+    throw new CustomOpeningError(
+      error instanceof Error
+        ? error.message
+        : "Une erreur inconnue est survenue",
+      "DATABASE_ERROR"
+    );
+  }
+}
+
+/**
+ * Ajoute une variante à une ouverture (personnalisée ou système)
+ * @param id - ID de l'ouverture
+ * @param variation - Variante à ajouter
+ * @returns Promise<Opening> - L'ouverture mise à jour
+ * @throws {CustomOpeningError} Si l'ajout échoue
+ */
+export async function addVariationToOpening(
+  id: string,
+  variation: OpeningVariation
+): Promise<Opening> {
+  try {
+    // Récupérer l'ouverture existante
+    const { data: existing, error: fetchError } = await supabase
+      .from("openings")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (fetchError || !existing) {
+      throw new CustomOpeningError(
+        "Ouverture introuvable",
+        "NOT_FOUND"
+      );
+    }
+
+    console.log("📋 Ouverture existante:", {
+      id: existing.id,
+      name: existing.name,
+      is_custom: existing.is_custom,
+      variations_count: existing.variations?.length || 0,
+    });
+
+    // Ajouter la variante aux variations existantes
+    const updatedVariations = [
+      ...(existing.variations || []),
+      variation,
+    ];
+
+    console.log("💾 Tentative de mise à jour avec", updatedVariations.length, "variations");
+
+    // Mettre à jour l'ouverture avec vérification du nombre de lignes affectées
+    const { data: updateData, error: updateError } = await supabase
+      .from("openings")
+      .update({ variations: updatedVariations })
+      .eq("id", id)
+      .select();
+
+    if (updateError) {
+      console.error("❌ Erreur UPDATE:", updateError);
+      throw new CustomOpeningError(
+        `Erreur lors de l'ajout de la variante: ${updateError.message}`,
+        "DATABASE_ERROR"
+      );
+    }
+
+    // Vérifier qu'au moins une ligne a été mise à jour
+    if (!updateData || updateData.length === 0) {
+      console.error("❌ Aucune ligne mise à jour - problème de permissions RLS probable");
+      throw new CustomOpeningError(
+        "Aucune ligne n'a été mise à jour. Vérifiez les permissions RLS. L'ouverture est peut-être protégée.",
+        "DATABASE_ERROR"
+      );
+    }
+
+    console.log("✅ Variante ajoutée avec succès. Nouvelles variations:", updateData[0].variations?.length || 0);
+
+    // Retourner la première ligne (devrait être unique grâce à l'ID)
+    return updateData[0] as Opening;
   } catch (error) {
     if (error instanceof CustomOpeningError) {
       throw error;

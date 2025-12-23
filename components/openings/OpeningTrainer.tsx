@@ -5,6 +5,7 @@
 
 "use client";
 
+import Link from "next/link";
 import { Chessboard } from "@/components/chess/Chessboard";
 import { MoveHistory } from "@/components/chess/MoveHistory";
 import { FeedbackMessage } from "./FeedbackMessage";
@@ -43,16 +44,9 @@ export function OpeningTrainer({ opening }: OpeningTrainerProps) {
               <h2 className="text-2xl font-bold text-gray-900">
                 {opening.name}
               </h2>
-              <div className="flex items-center gap-2">
-                {opening.is_custom && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                    Personnalisée
-                  </span>
-                )}
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                  {opening.eco_code}
-                </span>
-              </div>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                {opening.eco_code}
+              </span>
             </div>
 
             <div className="flex items-center gap-4 text-sm">
@@ -66,13 +60,15 @@ export function OpeningTrainer({ opening }: OpeningTrainerProps) {
           </div>
 
           {/* Sélecteur de variantes */}
-          {state.opening && (
-            <VariationSelector
-              variations={state.opening.variations}
-              currentVariationIndex={state.currentVariationIndex}
-              onSelectVariation={actions.selectVariation}
-            />
-          )}
+          {state.opening &&
+            state.opening.variations &&
+            state.opening.variations.length > 0 && (
+              <VariationSelector
+                variations={state.opening.variations}
+                currentVariationIndex={state.currentVariationIndex}
+                onSelectVariation={actions.selectVariation}
+              />
+            )}
 
           {/* Barre de progression */}
           <div className="mb-4">
@@ -220,6 +216,27 @@ export function OpeningTrainer({ opening }: OpeningTrainerProps) {
             <p className="text-sm text-blue-800">{opening.description}</p>
           </div>
         )}
+
+        {/* Actions */}
+        <div className="bg-gray-50 rounded-lg border-2 border-gray-200 p-4">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3">Actions</h3>
+          <div className="space-y-2">
+            {opening.is_custom && (
+              <Link
+                href={`/openings/${opening.id}/edit`}
+                className="block w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors text-center text-sm"
+              >
+                Modifier l'ouverture
+              </Link>
+            )}
+            <Link
+              href={`/openings/${opening.id}/add-variation`}
+              className="block w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-center text-sm"
+            >
+              Ajouter une variante
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
