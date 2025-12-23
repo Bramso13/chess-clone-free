@@ -1,0 +1,420 @@
+{
+  "problems": [
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n5/4p2Q/2BnP3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 5",
+      "solution_moves": ["Qxf7#"],
+      "difficulty": "Facile",
+      "tactic_type": "Mat",
+      "explanation": "Mat du fou et de la dame sur f7, classique échec et mat en un coup.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n5/2b1n3/2B1P3/3P4/PPP2PPP/RNBQK1NR w KQkq - 0 6",
+      "solution_moves": ["Bxf7+", "Nxf7"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Le sacrifice du fou en f7 force la capture et gagne du matériel.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "solution_moves": ["Nf3"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Développement simple du cavalier attaquant le pion e5.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "2kr3r/ppp2ppp/2n5/2b1p3/4P3/2N2N2/PPP2PPP/2KR3R w - - 0 12",
+      "solution_moves": ["Rxd8+", "Rxd8", "Rd1"],
+      "difficulty": "Facile",
+      "tactic_type": "Enfilade",
+      "explanation": "L'échange des tours avec échec suivi de Rd1 enfile le roi et le cavalier.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 8",
+      "solution_moves": ["Bxf7+", "Rxf7", "Ne5"],
+      "difficulty": "Facile",
+      "tactic_type": "Clouage",
+      "explanation": "Après Bxf7+ Rxf7, le cavalier en e5 attaque la dame et la tour f7 est clouée.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "solution_moves": ["Nxe5"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Simple capture du pion e5 avec le cavalier.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "solution_moves": ["Nf6"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Développement du cavalier défendant le pion e5.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+      "solution_moves": ["Bxf7+", "Kxf7"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Sacrifice du fou pour désorganiser les noirs et gagner du temps.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+      "solution_moves": ["Nxe4", "Nxe4", "d5"],
+      "difficulty": "Facile",
+      "tactic_type": "Double attaque",
+      "explanation": "Après Nxe4 Nxe4, le pion d5 attaque le fou c4 et le cavalier e4.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n5/4p3/4n3/2N2N2/PPPPQPPP/R1B1KB1R w KQkq - 0 6",
+      "solution_moves": ["Nxe5", "Nxe5", "Qxe4"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Nxe5 Nxe5 Qxe4 gagne du matériel pour les blancs.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/5N2/PPPP2PP/RNBQKB1R b KQkq f3 0 3",
+      "solution_moves": ["Nxe4"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Les noirs capturent le pion e4 avec le cavalier.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "solution_moves": ["exd4"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Simple capture du pion d4.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq d3 0 4",
+      "solution_moves": ["Nxe4"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Les noirs capturent le pion central e4.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+      "solution_moves": ["d4"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Ouverture du centre avec d4.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "solution_moves": ["e5"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Réponse symétrique avec e5.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "solution_moves": ["d5"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Contrôle du centre avec d5.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+      "solution_moves": ["e5"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Attaque du cavalier f6 avec le pion.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "solution_moves": ["Nc3"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Développement du cavalier vers c3.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "solution_moves": ["Nf3"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Développement du cavalier roi.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 3 3",
+      "solution_moves": ["Nxe4"],
+      "difficulty": "Facile",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Les noirs gagnent le pion e4.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 5 5",
+      "solution_moves": ["d4"],
+      "difficulty": "Moyen",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Ouverture du centre pour obtenir l'initiative.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+      "solution_moves": ["Bxf2+", "Kxf2"],
+      "difficulty": "Moyen",
+      "tactic_type": "Sacrifice",
+      "explanation": "Sacrifice du fou pour exposer le roi blanc.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 0 4",
+      "solution_moves": ["Nxe4"],
+      "difficulty": "Moyen",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Capture du pion e4 avec développement.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP1QPPP/R1B2RK1 w - - 0 9",
+      "solution_moves": ["Bxf7+", "Kh8"],
+      "difficulty": "Moyen",
+      "tactic_type": "Sacrifice",
+      "explanation": "Sacrifice du fou pour exposer le roi noir.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R b KQkq b3 0 5",
+      "solution_moves": ["Bxf2+", "Kxf2"],
+      "difficulty": "Moyen",
+      "tactic_type": "Sacrifice",
+      "explanation": "Sacrifice tactique du fou pour exposer le roi.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r2qkb1r/ppp2ppp/2np1n2/4p1B1/2B1P3/2N2N2/PPPP1PPP/R2QK2R w KQkq - 0 7",
+      "solution_moves": ["Bxf7+", "Kxf7"],
+      "difficulty": "Moyen",
+      "tactic_type": "Sacrifice",
+      "explanation": "Sacrifice du fou pour ouvrir le jeu.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+      "solution_moves": ["Ng5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Double attaque",
+      "explanation": "Le cavalier en g5 attaque f7 et menace plusieurs pièces.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 8",
+      "solution_moves": ["Bg5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Clouage",
+      "explanation": "Le fou cloue le cavalier f6 sur la dame.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 5 5",
+      "solution_moves": ["Nd5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Fourchette",
+      "explanation": "Le cavalier en d5 attaque le fou c5 et le cavalier f6.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQR1K1 w - - 0 8",
+      "solution_moves": ["Nd5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Fourchette",
+      "explanation": "Le cavalier en d5 fait une fourchette sur le fou et le cavalier.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6",
+      "solution_moves": ["Bxf2+", "Rxf2"],
+      "difficulty": "Moyen",
+      "tactic_type": "Sacrifice",
+      "explanation": "Sacrifice du fou pour perturber la position blanche.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQR1K1 w - - 0 8",
+      "solution_moves": ["Bg5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Clouage",
+      "explanation": "Clouage du cavalier f6 sur la dame d8.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+      "solution_moves": ["Bc5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Développement du fou avec tempo sur le roi.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPPQPPP/R1B2RK1 w - - 0 8",
+      "solution_moves": ["Nd5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Fourchette",
+      "explanation": "Fourchette tactique du cavalier en d5.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq d3 0 4",
+      "solution_moves": ["exd4"],
+      "difficulty": "Moyen",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Capture centrale du pion d4.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 w - - 0 7",
+      "solution_moves": ["Nd5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Fourchette",
+      "explanation": "Fourchette classique du cavalier d5.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7",
+      "solution_moves": ["Nd5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Fourchette",
+      "explanation": "Le cavalier en d5 attaque simultanément deux pièces.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "solution_moves": ["d4"],
+      "difficulty": "Moyen",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Ouverture du centre avec d4.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQR1K1 w - - 0 8",
+      "solution_moves": ["Nd5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Fourchette",
+      "explanation": "Fourchette tactique en d5.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq d3 0 4",
+      "solution_moves": ["exd4"],
+      "difficulty": "Moyen",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Les noirs capturent le pion central.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPPQPPP/R1B2RK1 w - - 0 8",
+      "solution_moves": ["Nd5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Fourchette",
+      "explanation": "Le cavalier d5 attaque plusieurs pièces.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+      "solution_moves": ["Bc5"],
+      "difficulty": "Moyen",
+      "tactic_type": "Gain de matériel",
+      "explanation": "Développement actif du fou en c5.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7",
+      "solution_moves": ["Nd5"],
+      "difficulty": "Difficile",
+      "tactic_type": "Fourchette",
+      "explanation": "Fourchette complexe nécessitant calcul précis.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP1QPPP/R1B2RK1 w - - 0 9",
+      "solution_moves": ["Bxf7+", "Kh8", "Bb3"],
+      "difficulty": "Difficile",
+      "tactic_type": "Sacrifice",
+      "explanation": "Sacrifice complexe du fou nécessitant calcul précis de la suite.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 w - - 0 7",
+      "solution_moves": ["Ng5", "d6", "Qf3"],
+      "difficulty": "Difficile",
+      "tactic_type": "Mat",
+      "explanation": "Attaque complexe menaçant le mat en plusieurs coups.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPPQPPP/R1B1K2R b KQkq - 6 5",
+      "solution_moves": ["Nd4", "Nxd4"],
+      "difficulty": "Difficile",
+      "tactic_type": "Double attaque",
+      "explanation": "Le cavalier en d4 force un échange favorable et menace plusieurs pièces.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPPQPPP/R1B2RK1 w - - 0 8",
+      "solution_moves": ["Nd5", "Nxd5", "Bxd5"],
+      "difficulty": "Difficile",
+      "tactic_type": "Fourchette",
+      "explanation": "Fourchette complexe avec suite forcing.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+      "solution_moves": ["Ng5", "O-O", "Qh5"],
+      "difficulty": "Difficile",
+      "tactic_type": "Mat",
+      "explanation": "Attaque forcing menaçant le mat, nécessite calcul précis.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP1QPPP/R1B2RK1 w - - 0 8",
+      "solution_moves": ["Bxf7+", "Rxf7", "Ne5"],
+      "difficulty": "Difficile",
+      "tactic_type": "Double attaque",
+      "explanation": "Sacrifice suivi d'une double attaque complexe.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQR1K1 w - - 0 8",
+      "solution_moves": ["Bxf7+", "Kh8", "Ng5"],
+      "difficulty": "Difficile",
+      "tactic_type": "Mat",
+      "explanation": "Combinaison de mat complexe nécessitant visualisation profonde.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r2qkb1r/ppp2ppp/2np1n2/4p1B1/2BPP3/2N2N2/PPP2PPP/R2QK2R b KQkq - 0 7",
+      "solution_moves": ["h6", "Bxf6", "Qxf6"],
+      "difficulty": "Difficile",
+      "tactic_type": "Clouage",
+      "explanation": "Gestion complexe du clouage avec suite forcing.",
+      "source": "manual"
+    },
+    {
+      "position_fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQR1K1 w - - 0 8",
+      "solution_moves": ["Nd5", "Nxd5", "exd5"],
+      "difficulty": "Difficile",
+      "tactic_type": "Fourchette",
+      "explanation": "Fourchette complexe avec conséquences stratégiques profondes.",
+      "source": "manual"
+    }
+  ]
+}

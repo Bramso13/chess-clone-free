@@ -5,42 +5,12 @@
 
 import type {
   StockfishEngine,
-  DifficultyLevel,
-  StockfishConfig,
+  DifficultyLevel as DifficultyLevelId,
   AnalysisOptions,
   AnalysisResult,
 } from "@/types/chess";
-
-/**
- * Configuration des niveaux de difficulté
- */
-const DIFFICULTY_CONFIGS: Record<DifficultyLevel, StockfishConfig> = {
-  beginner: {
-    skillLevel: 1,
-    depth: 1,
-    moveTime: 100,
-  },
-  intermediate: {
-    skillLevel: 5,
-    depth: 5,
-    moveTime: 500,
-  },
-  advanced: {
-    skillLevel: 10,
-    depth: 10,
-    moveTime: 1000,
-  },
-  expert: {
-    skillLevel: 15,
-    depth: 15,
-    moveTime: 2000,
-  },
-  master: {
-    skillLevel: 20,
-    depth: 20,
-    moveTime: 3000,
-  },
-};
+import type { DifficultyLevel } from "./difficultyLevels";
+import { DIFFICULTY_LEVELS, getDefaultDifficulty } from "./difficultyLevels";
 
 /**
  * Service pour interagir avec le moteur Stockfish
@@ -48,7 +18,7 @@ const DIFFICULTY_CONFIGS: Record<DifficultyLevel, StockfishConfig> = {
 export class StockfishService {
   private engine: StockfishEngine | null = null;
   private isEngineReady: boolean = false;
-  private currentDifficulty: DifficultyLevel = "intermediate";
+  private currentDifficulty: DifficultyLevel = getDefaultDifficulty();
   private messageQueue: Array<{
     resolve: (value: string) => void;
     reject: (error: Error) => void;
@@ -111,14 +81,32 @@ export class StockfishService {
   }
 
   /**
-   * Définit le niveau de difficulté
+   * Obtient le niveau de difficulté actuel
    */
-  async setDifficulty(level: DifficultyLevel): Promise<void> {
+  getCurrentDifficulty(): DifficultyLevel {
+    return this.currentDifficulty;
+  }
+
+  /**
+   * Définit le niveau de difficulté
+   * @param level - Objet DifficultyLevel ou ID string (pour compatibilité)
+   */
+  async setDifficulty(level: DifficultyLevel | DifficultyLevelId | string): Promise<void> {
     if (!this.engine) {
       throw new Error("Le moteur n'est pas initialisé");
     }
 
-    this.currentDifficulty = level;
+    // Si c'est un string, chercher le niveau correspondant
+    if (typeof level === "string") {
+      const foundLevel = DIFFICULTY_LEVELS.find((l) => l.id === level);
+      if (!foundLevel) {
+        throw new Error(`Niveau de difficulté inconnu: ${level}`);
+      }
+      this.currentDifficulty = foundLevel;
+    } else {
+      this.currentDifficulty = level;
+    }
+
     await this.applyDifficultyConfig();
   }
 
@@ -141,7 +129,7 @@ export class StockfishService {
       console.log(`[Stockfish] → Envoi direct: position fen ${fen}`);
 
       // Construire la commande go
-      const config = DIFFICULTY_CONFIGS[this.currentDifficulty];
+      const config = this.currentDifficulty.stockfishConfig;
       const depth = options?.depth ?? config.depth;
       const moveTime = options?.moveTime ?? config.moveTime;
 
@@ -195,7 +183,7 @@ export class StockfishService {
       console.log(`[Stockfish] → Envoi direct: position fen ${fen}`);
 
       // Configurer l'analyse
-      const config = DIFFICULTY_CONFIGS[this.currentDifficulty];
+      const config = this.currentDifficulty.stockfishConfig;
       const depth = options?.depth ?? config.depth;
       const moveTime = options?.moveTime ?? config.moveTime;
       const multiPv = options?.multiPv ?? 1;
@@ -253,18 +241,18 @@ export class StockfishService {
   private async applyDifficultyConfig(): Promise<void> {
     if (!this.engine) return;
 
-    const config = DIFFICULTY_CONFIGS[this.currentDifficulty];
+    const config = this.currentDifficulty.stockfishConfig;
+    const elo = this.currentDifficulty.estimatedElo;
 
     // setoption ne retourne pas de réponse, on envoie directement
     this.engine.postMessage(`setoption name Skill Level value ${config.skillLevel}`);
     console.log(`[Stockfish] → Envoi direct: setoption name Skill Level value ${config.skillLevel}`);
 
-    // Limiter la force si niveau débutant/intermédiaire
-    if (config.skillLevel < 10) {
+    // Limiter la force si niveau sous Expert (< 2000 Elo)
+    if (elo < 2000) {
       this.engine.postMessage("setoption name UCI_LimitStrength value true");
       console.log(`[Stockfish] → Envoi direct: setoption name UCI_LimitStrength value true`);
       
-      const elo = 800 + config.skillLevel * 100; // 800-1800 ELO
       this.engine.postMessage(`setoption name UCI_Elo value ${elo}`);
       console.log(`[Stockfish] → Envoi direct: setoption name UCI_Elo value ${elo}`);
     } else {

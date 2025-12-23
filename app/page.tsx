@@ -63,6 +63,22 @@ export default function Home() {
             href="/tactics"
             icon="🎯"
           />
+
+          {/* Module Génération de tactiques */}
+          <ModuleCard
+            title="Générer des tactiques"
+            description="Générez automatiquement de nouveaux problèmes tactiques à partir de parties réelles. Créez votre propre collection de positions d'entraînement."
+            href="/tactics/generate"
+            icon="✨"
+          />
+
+          {/* Module Jeu libre */}
+          <ModuleCard
+            title="Jeu libre"
+            description="Explorez librement différentes positions d'échecs. Jouez des coups pour les blancs ou les noirs, annulez vos coups et demandez des suggestions à Stockfish."
+            href="/free-play"
+            icon="🎮"
+          />
         </div>
 
         {/* Footer Info */}

@@ -12,6 +12,8 @@
     "test:ui": "vitest --ui",
     "test:supabase": "tsx lib/supabase/test-connection.ts",
     "seed:openings": "tsx lib/supabase/seed-openings.ts",
+    "seed:tactics": "tsx lib/supabase/seed-tactical-problems.ts",
+    "generate:tactics": "tsx lib/tactics/generate-tactics-batch.ts",
     "postinstall": "node scripts/copy-stockfish.js"
   },
   "dependencies": {

@@ -57,28 +57,42 @@ export default function OpeningsPage() {
                 Sélectionnez une ouverture pour commencer votre entraînement
               </p>
             </div>
-            <Link
-              href="/"
-              className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2 transition-colors"
-              aria-label="Retour à l'accueil"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+            <div className="flex items-center gap-4">
+              <Link
+                href="/openings/my-openings"
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              <span>Retour</span>
-            </Link>
+                Mes ouvertures
+              </Link>
+              <Link
+                href="/openings/create"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              >
+                Créer une ouverture
+              </Link>
+              <Link
+                href="/"
+                className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2 transition-colors"
+                aria-label="Retour à l'accueil"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+                <span>Retour</span>
+              </Link>
+            </div>
           </div>
         </div>
       </header>

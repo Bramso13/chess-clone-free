@@ -97,47 +97,32 @@ describe("GameConfiguration", () => {
   });
 
   describe("Validation", () => {
-    it("affiche une erreur si aucune difficulté n'est sélectionnée", () => {
+    it("désactive le bouton Commencer si seule la couleur est sélectionnée", () => {
       render(<GameConfiguration />);
 
       // Sélectionner seulement la couleur
       fireEvent.click(screen.getByLabelText("Jouer avec les Blancs"));
 
-      // Essayer de commencer
-      fireEvent.click(screen.getByText("Commencer la partie"));
-
-      expect(
-        screen.getByText("Veuillez sélectionner un niveau de difficulté")
-      ).toBeInTheDocument();
+      // Le bouton devrait rester désactivé
+      const startButton = screen.getByText("Commencer la partie");
+      expect(startButton).toBeDisabled();
     });
 
-    it("affiche une erreur si aucune couleur n'est sélectionnée", () => {
+    it("désactive le bouton Commencer si seule la difficulté est sélectionnée", () => {
       render(<GameConfiguration />);
 
       // Sélectionner seulement la difficulté
       fireEvent.click(screen.getByText("Intermédiaire"));
 
-      // Essayer de commencer
-      fireEvent.click(screen.getByText("Commencer la partie"));
-
-      expect(
-        screen.getByText("Veuillez sélectionner une couleur")
-      ).toBeInTheDocument();
+      // Le bouton devrait rester désactivé
+      const startButton = screen.getByText("Commencer la partie");
+      expect(startButton).toBeDisabled();
     });
 
-    it("efface l'erreur quand une sélection est faite", () => {
+    it("n'affiche pas d'erreur au chargement initial", () => {
       render(<GameConfiguration />);
 
-      // Essayer de commencer sans configuration
-      fireEvent.click(screen.getByText("Commencer la partie"));
-
-      // Une erreur devrait apparaître
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-
-      // Faire une sélection
-      fireEvent.click(screen.getByText("Intermédiaire"));
-
-      // L'erreur devrait disparaître
+      // Aucune erreur ne devrait être visible
       expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     });
   });

@@ -137,17 +137,29 @@ export interface Opening {
   player_side: "white" | "black";
   /** Date de création */
   created_at: string;
+  /** Indique si l'ouverture est personnalisée (créée par un utilisateur) */
+  is_custom?: boolean;
+  /** Identifiant de l'utilisateur qui a créé l'ouverture (pour futur système d'authentification) */
+  created_by?: string | null;
 }
 
 /**
- * Niveaux de difficulté pour Stockfish
+ * Identifiants des niveaux de difficulté pour Stockfish
+ * @deprecated Utiliser DifficultyLevel de @/lib/stockfish/difficultyLevels
  */
-export type DifficultyLevel =
+export type DifficultyLevelId =
   | "beginner"
+  | "casual"
   | "intermediate"
   | "advanced"
   | "expert"
   | "master";
+
+/**
+ * Type pour la compatibilité (à supprimer progressivement)
+ * @deprecated Utiliser DifficultyLevel de @/lib/stockfish/difficultyLevels
+ */
+export type DifficultyLevel = DifficultyLevelId;
 
 /**
  * Configuration pour l'analyse Stockfish
@@ -214,4 +226,120 @@ export interface GameConfiguration {
   difficulty: DifficultyLevel;
   /** Couleur du joueur (blancs, noirs, ou aléatoire) */
   playerColor: PlayerColor;
+}
+
+/**
+ * Niveau de difficulté pour les problèmes tactiques
+ */
+export type TacticalDifficulty = "Facile" | "Moyen" | "Difficile";
+
+/**
+ * Type de tactique échiquéenne
+ */
+export type TacticType =
+  | "Fourchette"
+  | "Clouage"
+  | "Enfilade"
+  | "Découverte"
+  | "Mat"
+  | "Gain de matériel"
+  | "Double attaque"
+  | "Sacrifice";
+
+/**
+ * Interface pour un problème tactique
+ */
+export interface TacticalProblem {
+  /** UUID généré par Supabase */
+  id: string;
+  /** Position initiale en notation FEN */
+  position_fen: string;
+  /** Séquence de coups solution en notation SAN */
+  solution_moves: string[];
+  /** Niveau de difficulté */
+  difficulty: TacticalDifficulty;
+  /** Type de tactique */
+  tactic_type: TacticType;
+  /** Explication de la solution */
+  explanation: string;
+  /** Source du problème */
+  source?: "manual" | "generated" | "imported";
+  /** Date de création */
+  created_at: string;
+}
+
+/**
+ * Nœud d'une variante dans l'arbre de variantes
+ */
+export interface VariationNode {
+  /** Coup menant à ce nœud en notation algébrique */
+  move: string;
+  /** Position FEN après ce coup */
+  fen: string;
+  /** Profondeur depuis la position initiale */
+  depth: number;
+  /** Variantes possibles depuis cette position */
+  children: VariationNode[];
+}
+
+/**
+ * Arbre de variantes généré à partir d'une position
+ */
+export interface VariationTree {
+  /** Position initiale FEN */
+  rootFen: string;
+  /** Profondeur maximale de l'arbre */
+  maxDepth: number;
+  /** Tous les nœuds de l'arbre (structure arborescente) */
+  nodes: VariationNode[];
+}
+
+/**
+ * Variante analysée par Stockfish
+ */
+export interface AnalyzedVariation {
+  /** Position analysée (FEN) */
+  fen: string;
+  /** Séquence de coups jusqu'à cette position */
+  moves: string[];
+  /** Évaluation en centipawns (positif = avantage blanc) */
+  evaluation: number;
+  /** Meilleur coup suggéré (format UCI) */
+  bestMove: string;
+  /** Meilleur coup en notation algébrique */
+  bestMoveSan?: string;
+  /** Profondeur d'analyse atteinte */
+  depth: number;
+  /** Temps d'analyse en millisecondes */
+  time: number;
+  /** Principal variation (ligne recommandée) */
+  pv?: string[];
+}
+
+/**
+ * Options pour l'analyse de variantes
+ */
+export interface VariationAnalysisOptions {
+  /** Profondeur d'analyse Stockfish (défaut: 12) */
+  depth?: number;
+  /** Temps max par analyse en millisecondes */
+  moveTime?: number;
+  /** Nombre max d'analyses parallèles (défaut: 3) */
+  maxConcurrentAnalyses?: number;
+  /** Utiliser cache (défaut: true) */
+  useCache?: boolean;
+  /** Callback de progression (current, total) */
+  onProgress?: (current: number, total: number) => void;
+}
+
+/**
+ * Indicateur de progression pour l'analyse
+ */
+export interface AnalysisProgress {
+  /** Nombre de variantes analysées */
+  current: number;
+  /** Nombre total de variantes à analyser */
+  total: number;
+  /** Pourcentage de progression */
+  percentage: number;
 }

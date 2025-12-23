@@ -43,9 +43,16 @@ export function OpeningTrainer({ opening }: OpeningTrainerProps) {
               <h2 className="text-2xl font-bold text-gray-900">
                 {opening.name}
               </h2>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {opening.eco_code}
-              </span>
+              <div className="flex items-center gap-2">
+                {opening.is_custom && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    Personnalisée
+                  </span>
+                )}
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  {opening.eco_code}
+                </span>
+              </div>
             </div>
 
             <div className="flex items-center gap-4 text-sm">

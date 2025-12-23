@@ -53,8 +53,16 @@ console.log(analysis);
 ### Configurer la difficulté
 
 ```typescript
-// Niveaux disponibles: beginner, intermediate, advanced, expert, master
+import { getDifficultyLevel } from "@/lib/stockfish/difficultyLevels";
+
+// Option 1: Utiliser un ID de niveau
 await stockfish.setDifficulty("beginner");
+
+// Option 2: Utiliser un objet DifficultyLevel complet
+const level = getDifficultyLevel("intermediate");
+if (level) {
+  await stockfish.setDifficulty(level);
+}
 
 const easyMove = await stockfish.getBestMove(fen);
 ```
@@ -68,13 +76,70 @@ stockfish.terminate();
 
 ## Niveaux de difficulté
 
-| Niveau | Skill Level | Profondeur | Temps | ELO approximatif |
-|--------|-------------|------------|-------|------------------|
-| `beginner` | 1 | 1 | 100ms | ~900 |
-| `intermediate` | 5 | 5 | 500ms | ~1300 |
-| `advanced` | 10 | 10 | 1000ms | ~1800 |
-| `expert` | 15 | 15 | 2000ms | ~2200 |
-| `master` | 20 | 20 | 3000ms | ~2600+ |
+Le système propose 6 niveaux de difficulté calibrés pour différents types de joueurs :
+
+| Niveau | Skill Level | Profondeur | Temps | ELO approximatif | Recommandé pour |
+|--------|-------------|------------|-------|------------------|-----------------|
+| **Débutant** (`beginner`) | 1 | 1 | 100ms | ~800 | Joueurs découvrant les échecs |
+| **Joueur Occasionnel** (`casual`) | 3 | 3 | 300ms | ~1100 | Joueurs avec quelques parties d'expérience |
+| **Intermédiaire** (`intermediate`) | 7 | 7 | 500ms | ~1400 | Joueurs avec des bases solides |
+| **Avancé** (`advanced`) | 12 | 12 | 1000ms | ~1800 | Joueurs de club |
+| **Expert** (`expert`) | 17 | 17 | 2000ms | ~2200 | Joueurs compétitifs et tournois |
+| **Maître** (`master`) | 20 | 20 | 3000ms | ~2800 | Joueurs de niveau maître |
+
+### Fonctions utilitaires pour les niveaux
+
+```typescript
+import {
+  DIFFICULTY_LEVELS,
+  getDifficultyLevel,
+  getDefaultDifficulty,
+  isValidDifficultyId,
+  getAllDifficultyIds,
+  getNextDifficulty,
+  getPreviousDifficulty,
+} from "@/lib/stockfish/difficultyLevels";
+
+// Obtenir tous les niveaux
+const allLevels = DIFFICULTY_LEVELS;
+
+// Obtenir un niveau spécifique
+const intermediate = getDifficultyLevel("intermediate");
+console.log(intermediate.name); // "Intermédiaire"
+console.log(intermediate.description); // Description complète
+console.log(intermediate.estimatedElo); // 1400
+
+// Obtenir le niveau par défaut (Intermédiaire)
+const defaultLevel = getDefaultDifficulty();
+
+// Valider un ID de niveau
+if (isValidDifficultyId("expert")) {
+  console.log("Niveau valide");
+}
+
+// Obtenir tous les IDs
+const ids = getAllDifficultyIds();
+// ["beginner", "casual", "intermediate", "advanced", "expert", "master"]
+
+// Navigation entre niveaux
+const next = getNextDifficulty("intermediate"); // → advanced
+const prev = getPreviousDifficulty("intermediate"); // → casual
+```
+
+### Guide de sélection du niveau
+
+| Votre niveau | Niveau recommandé |
+|--------------|-------------------|
+| Débutant complet | **Débutant** |
+| Connaît les règles | **Joueur Occasionnel** |
+| Joueur de club occasionnel | **Intermédiaire** (défaut) |
+| Joueur de club régulier | **Avancé** |
+| Joueur compétitif (1800+) | **Expert** |
+| Joueur titré (2000+) | **Maître** |
+
+**Conseil**: Commencez plus bas que votre niveau réel. Il vaut mieux gagner régulièrement contre un niveau inférieur que perdre constamment contre un niveau trop fort.
+
+Pour plus de détails sur la calibration des niveaux, consultez [DIFFICULTY_CALIBRATION.md](./DIFFICULTY_CALIBRATION.md).
 
 ## Protocole UCI
 

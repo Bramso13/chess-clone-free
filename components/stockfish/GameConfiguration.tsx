@@ -85,10 +85,15 @@ export function GameConfiguration() {
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-gray-900">{level.name}</h3>
                 <span className="text-sm text-gray-500">
-                  ~{level.estimatedElo}
+                  ~{level.estimatedElo} Elo
                 </span>
               </div>
-              <p className="text-sm text-gray-600">{level.description}</p>
+              <p className="text-sm text-gray-600 mb-1">{level.description}</p>
+              {level.recommendedFor && (
+                <p className="text-xs text-gray-500 italic">
+                  Pour : {level.recommendedFor}
+                </p>
+              )}
               {difficulty === level.id && (
                 <div className="mt-2 flex items-center text-blue-600 text-sm">
                   <svg
@@ -162,7 +167,7 @@ export function GameConfiguration() {
           onClick={() => router.push("/")}
           className="px-6 py-3 text-gray-700 hover:text-gray-900 hover:underline"
         >
-          ← Retour à l'accueil
+          ← Retour à l&apos;accueil
         </button>
 
         <button

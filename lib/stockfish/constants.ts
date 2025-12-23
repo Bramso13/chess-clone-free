@@ -1,54 +1,47 @@
 /**
  * Constantes pour le module Stockfish
+ * Ce fichier réexporte les niveaux depuis difficultyLevels.ts pour compatibilité UI
  */
 
-import type { DifficultyLevel } from "@/types/chess";
+import type { DifficultyLevel as DifficultyLevelId } from "@/types/chess";
+import { DIFFICULTY_LEVELS as FULL_DIFFICULTY_LEVELS } from "./difficultyLevels";
 
 /**
- * Configuration des niveaux de difficulté pour jouer contre Stockfish
+ * Configuration des niveaux de difficulté pour l'interface utilisateur
+ * @deprecated Utiliser DifficultyLevel depuis ./difficultyLevels pour la logique métier
  */
 export interface DifficultyConfig {
-  id: DifficultyLevel;
+  id: DifficultyLevelId;
   name: string;
   description: string;
   estimatedElo: number;
+  recommendedFor?: string;
 }
 
 /**
- * Niveaux de difficulté disponibles
+ * Niveaux de difficulté disponibles pour l'UI
+ * Réexportés depuis difficultyLevels.ts avec format simplifié
  */
-export const DIFFICULTY_LEVELS: DifficultyConfig[] = [
-  {
-    id: "beginner",
-    name: "Débutant",
-    description: "Idéal pour les joueurs qui commencent",
-    estimatedElo: 900,
-  },
-  {
-    id: "intermediate",
-    name: "Intermédiaire",
-    description: "Pour les joueurs avec quelques bases",
-    estimatedElo: 1300,
-  },
-  {
-    id: "advanced",
-    name: "Avancé",
-    description: "Pour les joueurs expérimentés",
-    estimatedElo: 1800,
-  },
-  {
-    id: "expert",
-    name: "Expert",
-    description: "Pour les joueurs de niveau compétitif",
-    estimatedElo: 2200,
-  },
-  {
-    id: "master",
-    name: "Maître",
-    description: "Pour les joueurs de niveau maître",
-    estimatedElo: 2600,
-  },
-];
+export const DIFFICULTY_LEVELS: DifficultyConfig[] = FULL_DIFFICULTY_LEVELS.map(
+  (level) => ({
+    id: level.id as DifficultyLevelId,
+    name: level.name,
+    description: level.description,
+    estimatedElo: level.estimatedElo,
+    recommendedFor: level.recommendedFor,
+  })
+);
+
+/**
+ * Réexporter le type et les fonctions utilitaires pour accès facile
+ */
+export type { DifficultyLevel } from "./difficultyLevels";
+export {
+  getDifficultyLevel,
+  getDefaultDifficulty,
+  isValidDifficultyId,
+  getAllDifficultyIds,
+} from "./difficultyLevels";
 
 /**
  * Options de couleur pour le joueur
