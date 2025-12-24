@@ -3,7 +3,7 @@
  * Gère la logique de validation des coups et la progression dans la solution
  */
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { Chess } from "chess.js";
 import type { TacticalProblem, Move } from "@/types/chess";
 import { ChessService } from "@/lib/chess/chessService";
@@ -73,6 +73,93 @@ interface UseTacticsSolverResult {
 }
 
 /**
+ * Détermine qui est le joueur (celui qui gagne) en analysant la solution complète
+ * Retourne aussi quels coups appartiennent au gagnant
+ */
+function determinePlayerAndMoves(
+  initialFen: string,
+  solutionMoves: string[]
+): {
+  playerColor: "white" | "black";
+  playerMoveIndices: number[];
+} {
+  try {
+    const game = ChessService.loadPosition(initialFen);
+
+    // Jouer tous les coups pour analyser la position finale
+    for (const move of solutionMoves) {
+      ChessService.makeMove(game, move);
+    }
+
+    // Analyser la position finale pour déterminer qui gagne
+    const finalState = ChessService.getGameState(game);
+    let winnerColor: "white" | "black";
+
+    if (finalState.isCheckmate) {
+      // Si c'est mat, le camp qui vient de jouer a fait mat à l'adversaire
+      // Le gagnant est celui qui a fait mat (l'autre camp que celui qui doit jouer)
+      winnerColor = finalState.turn === "white" ? "black" : "white";
+    } else {
+      // Si pas de mat, le gagnant est celui qui joue le premier coup (supposition)
+      const initialGame = ChessService.loadPosition(initialFen);
+      winnerColor = initialGame.turn() === "w" ? "white" : "black";
+    }
+
+    // Recalculer quels coups appartiennent au gagnant
+    const initialGame = ChessService.loadPosition(initialFen);
+    const initialColor = initialGame.turn() === "w" ? "white" : "black";
+
+    // Identifier quels coups appartiennent au gagnant
+    const winnerMoveIndices: number[] = [];
+    let color = initialColor;
+    for (let i = 0; i < solutionMoves.length; i++) {
+      if (color === winnerColor) {
+        winnerMoveIndices.push(i);
+      }
+      color = color === "white" ? "black" : "white";
+    }
+
+    return {
+      playerColor: winnerColor,
+      playerMoveIndices: winnerMoveIndices,
+    };
+  } catch {
+    // En cas d'erreur, fallback
+    const game = ChessService.loadPosition(initialFen);
+    const initialColor = game.turn() === "w" ? "white" : "black";
+    // Par défaut, le joueur joue les coups pairs
+    const playerMoveIndices = [];
+    for (let i = 0; i < solutionMoves.length; i += 2) {
+      playerMoveIndices.push(i);
+    }
+    return {
+      playerColor: initialColor,
+      playerMoveIndices,
+    };
+  }
+}
+
+/**
+ * Détermine si c'est au tour du joueur en fonction de l'index du coup
+ * Le joueur joue uniquement les coups du gagnant
+ */
+function determineIsPlayerTurn(
+  moveIndex: number,
+  playerMoveIndices: number[]
+): boolean {
+  if (playerMoveIndices.length === 0) {
+    return false;
+  }
+
+  if (moveIndex > playerMoveIndices[playerMoveIndices.length - 1]) {
+    return false;
+  }
+
+  // Le joueur joue uniquement les coups qui appartiennent au gagnant
+  return playerMoveIndices.includes(moveIndex);
+}
+
+/**
  * Hook pour gérer la résolution d'un problème tactique
  * @param problem - Le problème tactique à résoudre
  * @param options - Options de configuration (annulation automatique, etc.)
@@ -87,16 +174,46 @@ export function useTacticsSolver(
   // Référence pour stocker les timeouts d'annulation
   const undoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Pour les tactiques Lichess (source="imported"), le premier coup est joué automatiquement par l'adversaire
+  // Le joueur joue ensuite les coups impairs (1, 3, 5...), l'adversaire joue les coups pairs (0, 2, 4...)
+  const isLichessTactic = problem.source === "imported";
+
+  // Déterminer qui est le joueur (celui qui gagne) et quels coups il joue
+  const { playerColor, playerMoveIndices } = useMemo(
+    () => determinePlayerAndMoves(problem.position_fen, problem.solution_moves),
+    [problem.position_fen, problem.solution_moves]
+  );
+
   // État initial
   const [state, setState] = useState<TacticsSolverState>(() => {
     const game = ChessService.loadPosition(problem.position_fen);
+
+    let initialIsPlayerTurn: boolean;
+
+    if (isLichessTactic) {
+      // Pour Lichess : le premier coup (index 0) est joué automatiquement par l'adversaire
+      // Le joueur joue les coups impairs (1, 3, 5...)
+      initialIsPlayerTurn = false; // L'adversaire joue d'abord
+    } else {
+      // Pour les autres tactiques : le joueur joue les coups du gagnant
+      const { playerMoveIndices: initialPlayerMoveIndices } =
+        determinePlayerAndMoves(problem.position_fen, problem.solution_moves);
+
+      initialIsPlayerTurn = initialPlayerMoveIndices.includes(0);
+
+      // Fallback si nécessaire
+      if (initialPlayerMoveIndices.length === 0 || !initialIsPlayerTurn) {
+        initialIsPlayerTurn = true;
+      }
+    }
+
     return {
       game,
       currentMoveIndex: 0,
       isComplete: false,
       lastFeedback: null,
       currentFen: problem.position_fen,
-      isPlayerTurn: true,
+      isPlayerTurn: initialIsPlayerTurn,
       moveHistory: [],
       stateHistory: [],
     };
@@ -111,17 +228,76 @@ export function useTacticsSolver(
     }
 
     const game = ChessService.loadPosition(problem.position_fen);
+
+    let initialIsPlayerTurn: boolean;
+
+    if (isLichessTactic) {
+      // Pour Lichess : le premier coup (index 0) est joué automatiquement par l'adversaire
+      initialIsPlayerTurn = false; // L'adversaire joue d'abord
+    } else {
+      // Pour les autres tactiques : le joueur joue les coups du gagnant
+      const { playerMoveIndices } = determinePlayerAndMoves(
+        problem.position_fen,
+        problem.solution_moves
+      );
+
+      initialIsPlayerTurn = playerMoveIndices.includes(0);
+      if (playerMoveIndices.length === 0 || !initialIsPlayerTurn) {
+        initialIsPlayerTurn = true; // Fallback
+      }
+    }
+
     setState({
       game,
       currentMoveIndex: 0,
       isComplete: false,
       lastFeedback: null,
       currentFen: problem.position_fen,
-      isPlayerTurn: true,
+      isPlayerTurn: initialIsPlayerTurn,
       moveHistory: [],
       stateHistory: [],
     });
-  }, [problem.id, problem.position_fen]);
+  }, [problem.id, problem.position_fen, isLichessTactic]);
+
+  // Pour Lichess : jouer automatiquement le premier coup (adversaire) au démarrage
+  useEffect(() => {
+    if (
+      isLichessTactic &&
+      state.currentMoveIndex === 0 &&
+      !state.isPlayerTurn &&
+      !state.isComplete
+    ) {
+      // Le premier coup est celui de l'adversaire, le jouer automatiquement
+      const opponentMove = problem.solution_moves[0];
+      if (opponentMove) {
+        setTimeout(() => {
+          const newGame = new Chess(state.game.fen());
+          ChessService.makeMove(newGame, opponentMove);
+
+          const newMoveIndex = 1;
+          const isNowComplete = newMoveIndex >= problem.solution_moves.length;
+
+          setState({
+            game: newGame,
+            currentMoveIndex: newMoveIndex,
+            isComplete: isNowComplete,
+            lastFeedback: null,
+            currentFen: newGame.fen(),
+            isPlayerTurn: !isNowComplete, // Après le coup de l'adversaire, c'est au joueur (index 1 = impair)
+            moveHistory: [opponentMove],
+            stateHistory: [],
+          });
+        }, 500);
+      }
+    }
+  }, [
+    isLichessTactic,
+    state.currentMoveIndex,
+    state.isPlayerTurn,
+    state.isComplete,
+    state.game,
+    problem.solution_moves,
+  ]);
 
   // Nettoyer les timeouts au démontage
   useEffect(() => {
@@ -134,11 +310,32 @@ export function useTacticsSolver(
 
   /**
    * Jouer automatiquement le coup de l'adversaire
+   * IMPORTANT: Cette fonction ne doit être appelée QUE pour les coups de l'adversaire (index impairs)
    */
   const playOpponentMove = useCallback(
     (currentState: TacticsSolverState) => {
       // Vérifier s'il y a un coup adversaire à jouer
       if (currentState.currentMoveIndex >= problem.solution_moves.length) {
+        return;
+      }
+
+      // Pour Lichess : l'adversaire joue les coups pairs (0, 2, 4...)
+      // Pour les autres : l'adversaire joue les coups qui ne sont pas du gagnant
+      let isOpponentMove: boolean;
+
+      if (isLichessTactic) {
+        // Lichess : adversaire joue les coups pairs (0, 2, 4...)
+        isOpponentMove = currentState.currentMoveIndex % 2 === 0;
+      } else {
+        // Autres tactiques : adversaire joue les coups qui ne sont pas du gagnant
+        isOpponentMove =
+          playerMoveIndices.length > 0
+            ? !playerMoveIndices.includes(currentState.currentMoveIndex)
+            : currentState.currentMoveIndex % 2 === 1; // Fallback : coups impairs
+      }
+
+      if (!isOpponentMove) {
+        // Ce n'est pas un coup de l'adversaire, ne rien faire
         return;
       }
 
@@ -153,19 +350,39 @@ export function useTacticsSolver(
         const newMoveIndex = currentState.currentMoveIndex + 1;
         const isNowComplete = newMoveIndex >= problem.solution_moves.length;
 
+        // Déterminer si c'est au tour du joueur après le coup de l'adversaire
+        let nextIsPlayerTurn = false;
+        if (!isNowComplete) {
+          if (isLichessTactic) {
+            // Lichess : le joueur joue les coups impairs (1, 3, 5...)
+            nextIsPlayerTurn = newMoveIndex % 2 === 1;
+          } else {
+            // Autres tactiques : le joueur joue les coups du gagnant
+            if (playerMoveIndices.length > 0) {
+              nextIsPlayerTurn = determineIsPlayerTurn(
+                newMoveIndex,
+                playerMoveIndices
+              );
+            } else {
+              // Fallback : le joueur joue les coups pairs
+              nextIsPlayerTurn = newMoveIndex % 2 === 0;
+            }
+          }
+        }
+
         setState({
           game: newGame,
           currentMoveIndex: newMoveIndex,
           isComplete: isNowComplete,
           lastFeedback: null, // Réinitialiser le feedback
           currentFen: newGame.fen(),
-          isPlayerTurn: !isNowComplete, // Si complet, plus de tour
+          isPlayerTurn: nextIsPlayerTurn,
           moveHistory: [...currentState.moveHistory, opponentMove],
           stateHistory: currentState.stateHistory, // Préserver l'historique
         });
       }, 800);
     },
-    [problem.solution_moves]
+    [problem.solution_moves, playerMoveIndices, isLichessTactic]
   );
 
   /**
@@ -224,6 +441,25 @@ export function useTacticsSolver(
         return;
       }
 
+      // VÉRIFICATION CRITIQUE : Le joueur ne doit jouer QUE ses propres coups
+      let isPlayerMove: boolean;
+
+      if (isLichessTactic) {
+        // Lichess : le joueur joue les coups impairs (1, 3, 5...)
+        isPlayerMove = state.currentMoveIndex % 2 === 1;
+      } else {
+        // Autres tactiques : le joueur joue les coups du gagnant
+        isPlayerMove =
+          playerMoveIndices.length > 0
+            ? playerMoveIndices.includes(state.currentMoveIndex)
+            : state.currentMoveIndex % 2 === 0; // Fallback : coups pairs
+      }
+
+      if (!isPlayerMove) {
+        // Ce n'est pas un coup du joueur, ne rien faire
+        return;
+      }
+
       // Sauvegarder l'état actuel avant de jouer le coup (pour annulation)
       const stateSnapshot = saveStateSnapshot(state);
 
@@ -272,7 +508,7 @@ export function useTacticsSolver(
         return;
       }
 
-      // Vérifier si le coup correspond au coup attendu
+      // Vérifier si le coup correspond au coup attendu (qui DOIT être un coup du joueur)
       const expectedMove = problem.solution_moves[state.currentMoveIndex];
 
       if (sanMove === expectedMove) {
@@ -283,21 +519,42 @@ export function useTacticsSolver(
         const newMoveIndex = state.currentMoveIndex + 1;
         const isNowComplete = newMoveIndex >= problem.solution_moves.length;
 
+        // Déterminer si c'est au tour du joueur après ce coup
+        let nextIsPlayerTurn = false;
+        if (!isNowComplete) {
+          if (isLichessTactic) {
+            // Lichess : le joueur joue les coups impairs (1, 3, 5...)
+            nextIsPlayerTurn = newMoveIndex % 2 === 1;
+          } else {
+            // Autres tactiques : le joueur joue les coups du gagnant
+            if (playerMoveIndices.length > 0) {
+              nextIsPlayerTurn = determineIsPlayerTurn(
+                newMoveIndex,
+                playerMoveIndices
+              );
+            } else {
+              // Fallback : le joueur joue les coups pairs
+              nextIsPlayerTurn = newMoveIndex % 2 === 0;
+            }
+          }
+        }
+
         const newState: TacticsSolverState = {
           game: newGame,
           currentMoveIndex: newMoveIndex,
           isComplete: isNowComplete,
           lastFeedback: "correct",
           currentFen: newGame.fen(),
-          isPlayerTurn: false, // L'adversaire joue maintenant
+          isPlayerTurn: nextIsPlayerTurn,
           moveHistory: [...state.moveHistory, sanMove],
           stateHistory: [], // Réinitialiser l'historique après un coup correct (on ne peut pas annuler un coup correct)
         };
 
         setState(newState);
 
-        // Si pas terminé, jouer le coup de l'adversaire
-        if (!isNowComplete) {
+        // Si pas terminé ET que ce n'est plus au tour du joueur, jouer le coup de l'adversaire
+        // Le joueur ne joue QUE ses propres coups (index pairs), l'adversaire joue automatiquement
+        if (!isNowComplete && !nextIsPlayerTurn) {
           playOpponentMove(newState);
         }
       } else {
@@ -363,6 +620,8 @@ export function useTacticsSolver(
       autoUndoDelayMs,
       undoLastMove,
       saveStateSnapshot,
+      playerMoveIndices,
+      isLichessTactic,
     ]
   );
 
@@ -377,17 +636,34 @@ export function useTacticsSolver(
     }
 
     const game = ChessService.loadPosition(problem.position_fen);
+
+    let initialIsPlayerTurn: boolean;
+
+    if (isLichessTactic) {
+      // Pour Lichess : le premier coup (index 0) est joué automatiquement par l'adversaire
+      initialIsPlayerTurn = false; // L'adversaire joue d'abord
+    } else {
+      // Pour les autres tactiques : le joueur joue les coups du gagnant
+      const { playerMoveIndices: resetPlayerMoveIndices } =
+        determinePlayerAndMoves(problem.position_fen, problem.solution_moves);
+      if (resetPlayerMoveIndices.length > 0) {
+        initialIsPlayerTurn = resetPlayerMoveIndices.includes(0);
+      } else {
+        initialIsPlayerTurn = true; // Fallback
+      }
+    }
+
     setState({
       game,
       currentMoveIndex: 0,
       isComplete: false,
       lastFeedback: null,
       currentFen: problem.position_fen,
-      isPlayerTurn: true,
+      isPlayerTurn: initialIsPlayerTurn,
       moveHistory: [],
       stateHistory: [],
     });
-  }, [problem.position_fen]);
+  }, [problem.position_fen, isLichessTactic]);
 
   return {
     currentFen: state.currentFen,

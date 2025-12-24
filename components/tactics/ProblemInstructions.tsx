@@ -5,6 +5,7 @@
 
 "use client";
 
+import { Chess } from "chess.js";
 import type { TacticalProblem } from "@/types/chess";
 
 interface ProblemInstructionsProps {
@@ -26,14 +27,69 @@ const difficultyColors = {
  * Composant ProblemInstructions
  * Affiche les instructions et informations du problème
  */
+/**
+ * Détermine qui est le joueur (celui qui gagne) en analysant la solution complète
+ * Pour Lichess (source="imported"), le premier coup est celui de l'adversaire,
+ * donc le joueur joue le deuxième coup (index 1)
+ */
+function determinePlayerColor(
+  initialFen: string,
+  solutionMoves: string[],
+  source?: "manual" | "generated" | "imported"
+): "white" | "black" {
+  try {
+    const game = new Chess(initialFen);
+    const isLichessTactic = source === "imported";
+    
+    // Jouer tous les coups de la solution
+    for (const move of solutionMoves) {
+      game.move(move as any);
+    }
+    
+    // Analyser la position finale
+    const isCheckmate = game.isCheckmate();
+    
+    // Si c'est un mat, le joueur est celui qui fait mat (l'autre camp est en échec et mat)
+    if (isCheckmate) {
+      // Si c'est mat, le camp qui vient de jouer a fait mat à l'adversaire
+      // Le joueur est celui qui a fait mat (l'autre camp que celui qui doit jouer)
+      return game.turn() === "w" ? "black" : "white";
+    }
+    
+    // Si ce n'est pas un mat, déterminer qui est le joueur selon la source
+    if (isLichessTactic) {
+      // Pour Lichess : le joueur joue le deuxième coup (index 1)
+      // Jouer le premier coup pour voir qui joue ensuite
+      const testGame = new Chess(initialFen);
+      if (solutionMoves.length > 0) {
+        testGame.move(solutionMoves[0] as any);
+        // Le joueur est celui qui doit jouer après le premier coup
+        return testGame.turn() === "w" ? "white" : "black";
+      }
+    }
+    
+    // Pour les autres tactiques : le joueur joue le premier coup
+    const initialGame = new Chess(initialFen);
+    return initialGame.turn() === "w" ? "white" : "black";
+  } catch {
+    // En cas d'erreur, utiliser le FEN initial comme fallback
+    const game = new Chess(initialFen);
+    return game.turn() === "w" ? "white" : "black";
+  }
+}
+
 export function ProblemInstructions({
   problem,
   movesPlayed = 0,
   totalMoves = 0,
 }: ProblemInstructionsProps) {
-  // Déterminer qui joue en analysant la position FEN
-  const fenParts = problem.position_fen.split(" ");
-  const sideToMove = fenParts[1] === "w" ? "Blancs" : "Noirs";
+  // Déterminer qui est le joueur (celui qui gagne) en analysant la solution complète
+  const playerColor = determinePlayerColor(
+    problem.position_fen,
+    problem.solution_moves,
+    problem.source
+  );
+  const sideToMove = playerColor === "white" ? "Blancs" : "Noirs";
 
   return (
     <div className="bg-white rounded-lg border-2 border-gray-200 p-6 mb-6">

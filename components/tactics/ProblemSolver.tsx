@@ -5,7 +5,8 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { Chess } from "chess.js";
 import type { TacticalProblem } from "@/types/chess";
 import { Chessboard } from "@/components/chess/Chessboard";
 import { useTacticsSolver } from "@/lib/hooks/useTacticsSolver";
@@ -62,9 +63,49 @@ export function ProblemSolver({
     }
   }, [isComplete, onComplete]);
 
-  // Déterminer l'orientation de l'échiquier
-  const fenParts = problem.position_fen.split(" ");
-  const boardOrientation = fenParts[1] === "w" ? "white" : "black";
+  // Déterminer l'orientation de l'échiquier selon la couleur du joueur qui gagne
+  // L'échiquier doit être orienté pour que le joueur voie son camp en bas
+  const boardOrientation = useMemo((): "white" | "black" => {
+    try {
+      const game = new Chess(problem.position_fen);
+      const isLichessTactic = problem.source === "imported";
+      
+      // Jouer tous les coups pour analyser la position finale
+      for (const move of problem.solution_moves) {
+        game.move(move as any);
+      }
+      
+      // Déterminer qui gagne
+      let winnerColor: "white" | "black";
+      if (game.isCheckmate()) {
+        // Si mat, le gagnant est celui qui fait mat
+        winnerColor = game.turn() === "w" ? "black" : "white";
+      } else {
+        // Sinon, déterminer selon la source
+        if (isLichessTactic) {
+          // Pour Lichess : le joueur joue le deuxième coup (index 1)
+          const testGame = new Chess(problem.position_fen);
+          if (problem.solution_moves.length > 0) {
+            testGame.move(problem.solution_moves[0] as any);
+            winnerColor = testGame.turn() === "w" ? "white" : "black";
+          } else {
+            winnerColor = "white"; // Fallback
+          }
+        } else {
+          // Pour les autres : le joueur joue le premier coup
+          const initialGame = new Chess(problem.position_fen);
+          winnerColor = initialGame.turn() === "w" ? "white" : "black";
+        }
+      }
+      
+      // L'échiquier est orienté selon la couleur du joueur qui gagne
+      return winnerColor;
+    } catch {
+      // Fallback : utiliser le FEN initial
+      const fenParts = problem.position_fen.split(" ");
+      return fenParts[1] === "w" ? "white" : "black";
+    }
+  }, [problem.position_fen, problem.solution_moves, problem.source]);
 
   return (
     <div>
