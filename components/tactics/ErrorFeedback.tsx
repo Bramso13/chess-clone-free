@@ -12,6 +12,8 @@ interface ErrorFeedbackProps {
   onDismiss?: () => void;
   /** Auto-dismissal après X millisecondes (par défaut 2500ms) */
   autoDismissMs?: number;
+  /** Afficher un message indiquant que le coup sera annulé automatiquement */
+  showUndoMessage?: boolean;
 }
 
 /**
@@ -21,6 +23,7 @@ interface ErrorFeedbackProps {
 export function ErrorFeedback({
   onDismiss,
   autoDismissMs = 2500,
+  showUndoMessage = false,
 }: ErrorFeedbackProps) {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -75,9 +78,15 @@ export function ErrorFeedback({
           <p className="text-red-800 font-semibold">
             Ce n'est pas le meilleur coup. Réessayez !
           </p>
-          <p className="text-red-700 text-sm mt-1">
-            Réfléchissez à la position et trouvez la meilleure combinaison.
-          </p>
+          {showUndoMessage ? (
+            <p className="text-red-700 text-sm mt-1">
+              Le coup sera automatiquement annulé dans un instant...
+            </p>
+          ) : (
+            <p className="text-red-700 text-sm mt-1">
+              Réfléchissez à la position et trouvez la meilleure combinaison.
+            </p>
+          )}
         </div>
       </div>
     </div>

@@ -64,6 +64,14 @@ export default function Home() {
             icon="🎯"
           />
 
+          {/* Module Tactiques Lichess */}
+          <ModuleCard
+            title="Tactiques Lichess"
+            description="Entraînez-vous avec des puzzles tactiques importés de Lichess. Résolvez des problèmes variés pour améliorer vos compétences tactiques."
+            href="/tactics/lichess"
+            icon="📊"
+          />
+
           {/* Module Génération de tactiques */}
           <ModuleCard
             title="Générer des tactiques"
@@ -78,6 +86,14 @@ export default function Home() {
             description="Explorez librement différentes positions d'échecs. Jouez des coups pour les blancs ou les noirs, annulez vos coups et demandez des suggestions à Stockfish."
             href="/free-play"
             icon="🎮"
+          />
+
+          {/* Module Mode Extreme */}
+          <ModuleCard
+            title="Mode Extreme"
+            description="Entraînez-vous intensivement avec des problèmes tactiques en série. Résolvez problème après problème automatiquement pour améliorer votre vitesse et votre concentration."
+            href="/tactics/extreme"
+            icon="⚡"
           />
         </div>
 

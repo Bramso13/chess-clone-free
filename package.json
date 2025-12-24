@@ -13,13 +13,16 @@
     "test:supabase": "tsx lib/supabase/test-connection.ts",
     "seed:openings": "tsx lib/supabase/seed-openings.ts",
     "seed:tactics": "tsx lib/supabase/seed-tactical-problems.ts",
+    "seed:lichess-tactics": "tsx lib/supabase/seed-lichess-tactics.ts",
     "generate:tactics": "tsx lib/tactics/generate-tactics-batch.ts",
     "postinstall": "node scripts/copy-stockfish.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
+    "@types/papaparse": "^5.5.2",
     "chess.js": "^1.4.0",
     "next": "16.1.1",
+    "papaparse": "^5.5.3",
     "react": "19.2.3",
     "react-chessboard": "^5.8.6",
     "react-dom": "19.2.3",

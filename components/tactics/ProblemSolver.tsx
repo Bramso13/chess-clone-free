@@ -5,9 +5,11 @@
 
 "use client";
 
+import { useEffect } from "react";
 import type { TacticalProblem } from "@/types/chess";
 import { Chessboard } from "@/components/chess/Chessboard";
 import { useTacticsSolver } from "@/lib/hooks/useTacticsSolver";
+import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { SuccessFeedback } from "./SuccessFeedback";
 import { ErrorFeedback } from "./ErrorFeedback";
 import { ProblemActions } from "./ProblemActions";
@@ -19,6 +21,10 @@ interface ProblemSolverProps {
   previousProblemId?: string | null;
   /** ID du problème suivant (pour navigation) */
   nextProblemId?: string | null;
+  /** Callback appelé quand le problème est résolu */
+  onComplete?: () => void;
+  /** Callback appelé quand le problème est échoué (optionnel, pour mode Extreme) */
+  onFailed?: () => void;
 }
 
 /**
@@ -29,7 +35,12 @@ export function ProblemSolver({
   problem,
   previousProblemId,
   nextProblemId,
+  onComplete,
+  onFailed,
 }: ProblemSolverProps) {
+  // Charger les préférences utilisateur
+  const { preferences } = useUserPreferences();
+
   const {
     currentFen,
     feedback,
@@ -39,7 +50,17 @@ export function ProblemSolver({
     totalMoves,
     handleMove,
     reset,
-  } = useTacticsSolver(problem);
+  } = useTacticsSolver(problem, {
+    autoUndoIncorrectMoves: preferences.autoUndoIncorrectMoves,
+    autoUndoDelayMs: preferences.autoUndoDelayMs,
+  });
+
+  // Appeler les callbacks quand l'état change
+  useEffect(() => {
+    if (isComplete && onComplete) {
+      onComplete();
+    }
+  }, [isComplete, onComplete]);
 
   // Déterminer l'orientation de l'échiquier
   const fenParts = problem.position_fen.split(" ");
@@ -58,7 +79,16 @@ export function ProblemSolver({
       {isComplete && <SuccessFeedback problem={problem} />}
 
       {/* Feedback d'erreur */}
-      {feedback === "incorrect" && <ErrorFeedback autoDismissMs={2500} />}
+      {feedback === "incorrect" && (
+        <ErrorFeedback
+          autoDismissMs={
+            preferences.autoUndoIncorrectMoves
+              ? preferences.autoUndoDelayMs + 500
+              : 2500
+          }
+          showUndoMessage={preferences.autoUndoIncorrectMoves}
+        />
+      )}
 
       {/* Feedback pour coup correct (pendant la résolution) */}
       {feedback === "correct" && !isComplete && (
